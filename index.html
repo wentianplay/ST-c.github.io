@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>正太夺舍模拟器</title>
+    <style>
+        body {
+            font-family: '微软雅黑', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+
+        #container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        #character {
+            text-align: center;
+            margin: 20px;
+        }
+
+        #character-img {
+            width: 200px;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        #progress-container {
+            height: 30px;
+            background-color: #eee;
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #4CAF50;
+            transition: width 0.5s ease;
+        }
+
+        .button {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #1976D2;
+        }
+
+        #event-log {
+            height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .event-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>正太夺舍模拟器</h1>
+        <div id="character">
+            <img id="character-img" src="https://via.placeholder.com/200" alt="正太形象">
+            <p id="character-name">小正太</p>
+        </div>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        <button class="button" id="take-over-btn">夺舍</button>
+        <button class="button" id="reset-btn">重置</button>
+        <div id="event-log"></div>
+    </div>
+
+    <script>
+        let progress = 0;
+
+        document.getElementById('take-over-btn').addEventListener('click', takeOver);
+        document.getElementById('reset-btn').addEventListener('click', resetGame);
+
+        function takeOver() {
+            if (progress < 100) {
+                progress += Math.floor(Math.random() * 20) + 5; // 增加 5 到 25 的进度
+                if (progress > 100) progress = 100;
+                updateProgress();
+                logEvent("成功夺舍，进度增加到 " + progress + "%");
+            }
+
+            if (progress >= 100) {
+                logEvent("夺舍成功！小正太身体现在是你的了！");
+                document.getElementById('take-over-btn').disabled = true; // 禁用夺舍按钮
+            }
+        }
+
+        function updateProgress() {
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function resetGame() {
+            progress = 0;
+            updateProgress();
+            logEvent("游戏已重置，重新开始夺舍。");
+            document.getElementById('take-over-btn').disabled = false; // 启用夺舍按钮
+        }
+
+        function logEvent(message) {
+            const log = document.getElementById('event-log');
+            const entry = document.createElement('div');
+            entry.className = 'event-entry';
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight; // 自动滚动到最新条目
+        }
+    </script>
+</body>
+</html>
